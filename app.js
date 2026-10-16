@@ -115,9 +115,9 @@ var EV=[
  {id:'conchas',d:21,m:'Nov',t:'Rodada por la Quebrada de las Conchas',w:'Sábado 21 de noviembre',pt:'Salta capital, 8:00',dif:'Ripio',cup:20,left:12,route:'r-conchas',dd:'Salta a Cafayate por la Quebrada. Ida y vuelta en el día.'},
  {id:'encuentro',d:5,m:'Dic',t:'Encuentro de wanakeros',w:'Sábado 5 de diciembre',pt:'Salta capital, 11:00',dif:'Asfalto',cup:60,left:41,route:'r-salta',dd:'Mate, motos, equipos en mano y sorteo.'},
  {id:'obispo',d:16,m:'Ene',t:'Cuesta del Obispo y Cachi',w:'Sábado 16 de enero',pt:'Salta capital, 7:30',dif:'Ripio y offroad',cup:15,left:9,route:'r-obispo',dd:'Subida por la cuesta y vuelta por la ruta.'},
- {id:'cabra',d:6,m:'Feb',t:'Vuelta al Dique Cabra Corral',w:'Sábado 6 de febrero',pt:'Salta capital, 9:00',dif:'Asfalto y ripio',cup:30,left:22,route:'r-cabra',dd:'Salida corta al sur con parada en el dique. Ideal para probar el equipo por primera vez.'},
+ {id:'stand-cafayate',type:'stand',at:[130,335],d:6,m:'Feb',t:'Stand Wanaku en el encuentro motero de Cafayate',w:'Sábado 6 de febrero',pt:'Cafayate, 10:00 a 18:00',dif:'Stand',route:null,dd:'Pasá a ver las alforjas en mano, medí tu portaequipaje y charlá con el taller. Equipos para tocar y probar.'},
  {id:'salinas',d:20,m:'Feb',t:'Salinas Grandes por la Cuesta de Lipán',w:'Sábado 20 de febrero',pt:'Salta capital, 7:00',dif:'Asfalto y ripio',cup:25,left:14,route:'r-salinas',dd:'Subida hacia la Puna y vuelta por la misma ruta. Llevá abrigo.'},
- {id:'molinos',d:6,m:'Mar',t:'Molinos y Angastaco por la Ruta 40',w:'Sábado 6 de marzo',pt:'Salta capital, 7:30',dif:'Ripio',cup:18,left:11,route:'r-molinos',dd:'Dos días por los Valles Calchaquíes, con noche en el camino.'},
+ {id:'stand-cachi',type:'stand',at:[350,50],d:6,m:'Mar',t:'Stand Wanaku en el encuentro motero de Cachi',w:'Sábado 6 de marzo',pt:'Cachi, 10:00 a 18:00',dif:'Stand',route:null,dd:'Un día entre motos de todo el NOA. Mirá los modelos, armá tu combo y dejanos tu consulta por portaequipaje.'},
  {id:'toro',d:20,m:'Mar',t:'Quebrada del Toro y San Antonio de los Cobres',w:'Sábado 20 de marzo',pt:'Salta capital, 7:00',dif:'Ripio y offroad',cup:12,left:7,route:'r-toro',dd:'Cruce de la quebrada hacia la Puna. Para quienes ya tienen kilómetros de ripio.'}
 ];
 var PAST=[
@@ -301,19 +301,32 @@ R.eventos=function(){
   var left={};EV.forEach(function(e){left[e.id]=e.left});
   var sel=null;
   var draw=function(){
-    $('#evlist').innerHTML=EV.map(function(e){return '<article class="ev" data-ev="'+e.id+'" data-selected="'+(sel===e.id)+'"><div class="date"><small>'+e.m+'</small>'+e.d+'</div><div style="display:grid;gap:10px;min-width:0"><div><span class="tag">Ejemplo</span><h3 style="margin-top:6px">'+esc(e.t)+'</h3></div><p>'+esc(e.dd)+'</p><div class="meta"><span class="diff-pill">'+e.dif+'</span><span class="spec">'+esc(e.pt)+'</span><span class="spec">Cupos: '+left[e.id]+' de '+e.cup+'</span></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn sec" type="button" data-route="'+e.id+'">Ver ruta</button><button class="btn" type="button" data-join="'+e.id+'">Me sumo</button></div><form class="joinform" id="jf-'+e.id+'" hidden><div class="field"><label for="jn-'+e.id+'">Nombre</label><input id="jn-'+e.id+'" required></div><div class="two"><div class="field"><label for="jm-'+e.id+'">Moto</label><input id="jm-'+e.id+'" required></div><div class="field"><label for="jw-'+e.id+'">WhatsApp</label><input id="jw-'+e.id+'" inputmode="tel" required></div></div><button class="btn" type="submit">Enviar inscripción</button><p class="spec">Maqueta: la inscripción no se envía a nadie.</p><p class="spec" id="jo-'+e.id+'" role="status"></p></form></div></article>'}).join('');
+    $('#evlist').innerHTML=EV.map(function(e){
+      var st=e.type==='stand';
+      var meta='<div class="meta"><span class="diff-pill">'+e.dif+'</span><span class="spec">'+esc(e.pt)+'</span>'+(st?'':'<span class="spec">Cupos: '+left[e.id]+' de '+e.cup+'</span>')+'</div>';
+      var btns='<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn'+(st?'':' sec')+'" type="button" data-route="'+e.id+'">'+(st?'Ver lugar':'Ver ruta')+'</button>'+(st?'':'<button class="btn" type="button" data-join="'+e.id+'">Me sumo</button>')+'</div>';
+      var form=st?'':'<form class="joinform" id="jf-'+e.id+'" hidden><div class="field"><label for="jn-'+e.id+'">Nombre</label><input id="jn-'+e.id+'" required></div><div class="two"><div class="field"><label for="jm-'+e.id+'">Moto</label><input id="jm-'+e.id+'" required></div><div class="field"><label for="jw-'+e.id+'">WhatsApp</label><input id="jw-'+e.id+'" inputmode="tel" required></div></div><button class="btn" type="submit">Enviar inscripción</button><p class="spec">Maqueta: la inscripción no se envía a nadie.</p><p class="spec" id="jo-'+e.id+'" role="status"></p></form>';
+      return '<article class="ev" data-ev="'+e.id+'" data-selected="'+(sel===e.id)+'"><div class="date"><small>'+e.m+'</small>'+e.d+'</div><div style="display:grid;gap:10px;min-width:0"><div><span class="tag">Ejemplo</span><h3 style="margin-top:6px">'+esc(e.t)+'</h3></div><p>'+esc(e.dd)+'</p>'+meta+btns+form+'</div></article>'
+    }).join('');
     $$('[data-route]').forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-route'))})});
     $$('[data-join]').forEach(function(b){b.addEventListener('click',function(){var f=$('#jf-'+b.getAttribute('data-join'));f.hidden=!f.hidden;show(b.getAttribute('data-join'),true)})});
-    EV.forEach(function(e){$('#jf-'+e.id).addEventListener('submit',function(ev){ev.preventDefault();if(left[e.id]>0)left[e.id]--;$('#jo-'+e.id).textContent='Anotado en la maqueta. En el sitio real tu inscripción le llega a Wanaku.';draw2(e.id)})});
+    EV.filter(function(e){return e.type!=='stand'}).forEach(function(e){$('#jf-'+e.id).addEventListener('submit',function(ev){ev.preventDefault();if(left[e.id]>0)left[e.id]--;$('#jo-'+e.id).textContent='Anotado en la maqueta. En el sitio real tu inscripción le llega a Wanaku.';draw2(e.id)})});
   };
   var draw2=function(id){var el=$('[data-ev="'+id+'"] .meta .spec:last-child');if(el)el.textContent='Cupos: '+left[id]+' de '+EV.filter(function(x){return x.id===id})[0].cup};
   var show=function(id,keep){
     sel=id;$$('[data-ev]').forEach(function(a){a.setAttribute('data-selected',String(a.getAttribute('data-ev')===id))});
     var e=EV.filter(function(x){return x.id===id})[0];
-    EV.forEach(function(x){var r=x.route;var p=document.getElementById(r);p.style.opacity=r===e.route?'1':'.25'});
-    var path=document.getElementById(e.route);var len=path.getTotalLength();
-    path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
-    if(AN)anim(path,{strokeDashoffset:[len,0],duration:1200,ease:'inOutQuad'});else path.style.strokeDashoffset=0;
+    var pin=document.getElementById('pin');
+    EV.forEach(function(x){if(x.route)document.getElementById(x.route).style.opacity=x.id===e.id?'1':'.25'});
+    if(e.type==='stand'){
+      pin.setAttribute('cx',e.at[0]);pin.setAttribute('cy',e.at[1]);pin.style.opacity='1';
+      if(AN)anim(pin,{r:[6,18],opacity:[0,1],duration:700,ease:'outExpo'});else pin.setAttribute('r','18');
+    }else{
+      pin.style.opacity='0';
+      var path=document.getElementById(e.route);var len=path.getTotalLength();
+      path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+      if(AN)anim(path,{strokeDashoffset:[len,0],duration:1200,ease:'inOutQuad'});else path.style.strokeDashoffset=0;
+    }
   };
   draw();show('conchas');
   $('#evpast').innerHTML=PAST.map(function(p){return '<article class="card"><div class="ph" style="aspect-ratio:4/3"><img src="'+p.img+'" alt="'+esc(p.t)+'" loading="lazy"></div><div class="bd"><h3>'+esc(p.t)+'</h3><p>'+esc(p.d)+'</p></div></article>'}).join('');
