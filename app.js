@@ -114,7 +114,11 @@ var WALL=[
 var EV=[
  {id:'conchas',d:21,m:'Nov',t:'Rodada por la Quebrada de las Conchas',w:'Sábado 21 de noviembre',pt:'Salta capital, 8:00',dif:'Ripio',cup:20,left:12,route:'r-conchas',dd:'Salta a Cafayate por la Quebrada. Ida y vuelta en el día.'},
  {id:'encuentro',d:5,m:'Dic',t:'Encuentro de wanakeros',w:'Sábado 5 de diciembre',pt:'Salta capital, 11:00',dif:'Asfalto',cup:60,left:41,route:'r-salta',dd:'Mate, motos, equipos en mano y sorteo.'},
- {id:'obispo',d:16,m:'Ene',t:'Cuesta del Obispo y Cachi',w:'Sábado 16 de enero',pt:'Salta capital, 7:30',dif:'Ripio y offroad',cup:15,left:9,route:'r-obispo',dd:'Subida por la cuesta y vuelta por la ruta.'}
+ {id:'obispo',d:16,m:'Ene',t:'Cuesta del Obispo y Cachi',w:'Sábado 16 de enero',pt:'Salta capital, 7:30',dif:'Ripio y offroad',cup:15,left:9,route:'r-obispo',dd:'Subida por la cuesta y vuelta por la ruta.'},
+ {id:'cabra',d:6,m:'Feb',t:'Vuelta al Dique Cabra Corral',w:'Sábado 6 de febrero',pt:'Salta capital, 9:00',dif:'Asfalto y ripio',cup:30,left:22,route:'r-cabra',dd:'Salida corta al sur con parada en el dique. Ideal para probar el equipo por primera vez.'},
+ {id:'salinas',d:20,m:'Feb',t:'Salinas Grandes por la Cuesta de Lipán',w:'Sábado 20 de febrero',pt:'Salta capital, 7:00',dif:'Asfalto y ripio',cup:25,left:14,route:'r-salinas',dd:'Subida hacia la Puna y vuelta por la misma ruta. Llevá abrigo.'},
+ {id:'molinos',d:6,m:'Mar',t:'Molinos y Angastaco por la Ruta 40',w:'Sábado 6 de marzo',pt:'Salta capital, 7:30',dif:'Ripio',cup:18,left:11,route:'r-molinos',dd:'Dos días por los Valles Calchaquíes, con noche en el camino.'},
+ {id:'toro',d:20,m:'Mar',t:'Quebrada del Toro y San Antonio de los Cobres',w:'Sábado 20 de marzo',pt:'Salta capital, 7:00',dif:'Ripio y offroad',cup:12,left:7,route:'r-toro',dd:'Cruce de la quebrada hacia la Puna. Para quienes ya tienen kilómetros de ripio.'}
 ];
 var PAST=[
  {img:'img/c-32.webp',t:'Travesías por Córdoba',d:'Rodada de 4 días y 3 noches con base en la Motoposada Villa Sueño, en el Valle de Paravachasca. Salidas por San Agustín, Villa General Belgrano y Dique Los Molinos.'},
@@ -306,7 +310,7 @@ R.eventos=function(){
   var show=function(id,keep){
     sel=id;$$('[data-ev]').forEach(function(a){a.setAttribute('data-selected',String(a.getAttribute('data-ev')===id))});
     var e=EV.filter(function(x){return x.id===id})[0];
-    ['r-conchas','r-obispo','r-salta'].forEach(function(r){var p=document.getElementById(r);p.style.opacity=r===e.route?'1':'.25'});
+    EV.forEach(function(x){var r=x.route;var p=document.getElementById(r);p.style.opacity=r===e.route?'1':'.25'});
     var path=document.getElementById(e.route);var len=path.getTotalLength();
     path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
     if(AN)anim(path,{strokeDashoffset:[len,0],duration:1200,ease:'inOutQuad'});else path.style.strokeDashoffset=0;
