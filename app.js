@@ -172,7 +172,7 @@ function tilt(root){
 /* ---------- piezas ---------- */
 function card(p){
   var ph=p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="placeholder">Foto pendiente · '+esc(p.name)+'</div>';
-  return '<article class="card"><a class="ov ph" href="#producto-'+p.id+'" aria-label="Ver '+esc(p.name)+'">'+ph+'</a><div class="bd"><span class="sign" style="justify-self:start">'+esc(p.name)+'</span><p class="spec">'+p.spec.join(' · ')+'</p><p>'+esc(p.short)+'</p><div class="row"><span class="price">'+money(p.price)+'</span><button class="btn" type="button" data-add="'+p.id+'">Agregar</button></div></div></article>';
+  return '<article class="card"><a class="ov ph" href="#producto-'+p.id+'" aria-label="Ver '+esc(p.name)+'">'+ph+'</a><div class="bd pc"><span class="sign" style="justify-self:start">'+esc(p.name)+'</span><p class="spec">'+p.spec.join(' · ')+'</p><p>'+esc(p.short)+'</p><div class="row"><span class="price">'+money(p.price)+'</span><button class="btn" type="button" data-add="'+p.id+'">Agregar</button></div></div></article>';
 }
 function bindAdd(root){
   $$('[data-add]',root).forEach(function(b){b.addEventListener('click',function(){add(b.getAttribute('data-add'),1);toast(BY[b.getAttribute('data-add')].name+' en el carrito')})});
